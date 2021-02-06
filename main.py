@@ -218,6 +218,6 @@ if __name__ == '__main__':
                 queueBot.outputq.put("If correct please reply 'yes', otherwise please reply 'no'.")
                 confirmBooking = True
 
-        queueBot.outputq.put("Thank you for using our service. Goodbye!")
+        queueBot.outputq.put("Thank you for using our service. Bye!")
         reset = False
         queueBot.logOut()
