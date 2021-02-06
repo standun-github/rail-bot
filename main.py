@@ -188,36 +188,36 @@ if __name__ == '__main__':
                                        booking1.get_outbound_time())  # Run it!
 
         booking1.confirm_details()
-        confirm = queueBot.inputq.get()
-        if confirm.lower() == "yes" or confirm.lower() == "y":  # Correct details
-            queueBot.outputq.put("Great! Let me find the cheapest ticket for you")
-            find_ticket = bfare.trainFinder(booking1)
-            response = find_ticket.makeQuery()
-            if response == 'not found':
-                queueBot.outputq.put("It seems that no tickets are available, "
-                                     "would you like to find other tickets? (y/n)")
-                restart = queueBot.inputq.get()
-                if restart.lower() == "yes" or restart.lower() == "y":
+        confirmBooking = True
+        while confirmBooking:
+            confirmBooking = False
+            confirm = queueBot.inputq.get()
+            if confirm.lower() == "yes" or confirm.lower() == "y":  # Correct details
+                queueBot.outputq.put("Great! Let me find the cheapest ticket for you")
+                find_ticket = bfare.trainFinder(booking1)
+                response = find_ticket.makeQuery()
+                if response == 'not found':
+                    queueBot.outputq.put("It seems that no tickets are available, "
+                                         "would you like to find other tickets? (y/n)")
+                    restart = queueBot.inputq.get()
+                    if restart.lower() == "yes" or restart.lower() == "y":
+                        reset = True
+                ''' 
+                else: 
+                    print("Bot: Is there anything else I can do for you?")
+                    ========================================
+                    ========= Task 2 continue here =========
+                    ========================================
+                '''
+            elif confirm.lower() == "no" or confirm.lower() == "n":  # Incorrect details
+                queueBot.outputq.put("Okay. Do you want to start over?")
+                query = queueBot.inputq.get()
+                if query.lower() == "yes" or query.lower() == "y":
                     reset = True
-            ''' ========================================
-                ========= Task 2 continue here =========
-                ========================================
             else:
-                print("Bot: Is there anything else I can do for you?")
-            '''
-        elif confirm.lower() == "no" or confirm.lower() == "n":  # Incorrect details
-            queueBot.outputq.put("Okay. Do you want to start over?")
-            query = queueBot.inputq.get()
-            if query.lower() == "yes" or query.lower() == "y":
-                reset = True
-        else:
-            queueBot.outputq.put("If correct please reply 'yes', otherwise please reply 'no'.")
+                queueBot.outputq.put("If correct please reply 'yes', otherwise please reply 'no'.")
+                confirmBooking = True
 
-        queueBot.outputq.put("Would you like to book another ticket?")
-        query = queueBot.inputq.get()
-        if query.lower() == "yes" or query.lower() == "y":
-            reset = True
-        else:
-            queueBot.outputq.put("Thank you for using our service. Goodbye!")
-            reset = False
-            queueBot.logOut()
+        queueBot.outputq.put("Thank you for using our service. Goodbye!")
+        reset = False
+        queueBot.logOut()

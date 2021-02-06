@@ -50,7 +50,7 @@ async def sendOutQ():
             result = await loop.run_in_executor(pool, outputq.get)
             await general_channel.send("`"+result+"`")
 
-def logOut():
+async def logOut():
     await client.logout();
         
 init()
