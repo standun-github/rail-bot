@@ -208,13 +208,10 @@ if __name__ == '__main__':
                 ========================================
             '''
         elif confirm.lower() == "no" or confirm.lower() == "n":  # Incorrect details
-            queueBot.outputq.put("Okay. Do you want to start over?")
+            queueBot.outputq.put("Okay. Do you want to start over? (y/n)")
             query = queueBot.inputq.get()
             if query.lower() == "yes" or query.lower() == "y":
                 reset = True
-        else:
-            queueBot.outputq.put("If correct please reply 'yes', otherwise please reply 'no'.")
-            confirmBooking = True
 
     queueBot.outputq.put("Thank you for using our service. Bye!")
     queueBot.logOut()
