@@ -127,14 +127,16 @@ class trainFinder():
                                        self.out_time_param + "/dep/" + self.in_date_param + "/" + self.in_time_param + "/dep"
 
                         self.URL_str = "https://ojp.nationalrail.co.uk/service/timesandfares/" + self.URL_str
-                        queueBot.outputq.put(self.URL_str)
+                        queueBot.set_URL(self.URL_str)
+                        # queueBot.outputq.put(self.URL_str)
                     elif self.journeyTypeGroup == 'single':
                         self.out_date_param = self.outwardDate.replace("-", '')
                         self.out_time_param = result1.replace(":", '')
                         self.URL_str = self.dep_code + "/" + self.arr_code + "/" + self.out_date_param + "/" + \
                                        self.out_time_param + "/dep/"
                         self.URL_str = "https://ojp.nationalrail.co.uk/service/timesandfares/" + self.URL_str
-                        queueBot.outputq.put(self.URL_str)
+                        queueBot.set_URL(self.URL_str)
+                        # queueBot.outputq.put(self.URL_str)
 
             else:
                 result = self.findCheapest(outbound_prices)
@@ -180,8 +182,8 @@ class trainFinder():
             return "not found"
         else:
             if arr_date != 'empty':
-                result = departure_station + "-" + arrival_station + " " + str(arr_date) + " " + \
-                         departure_time + "-" + arrival_time + " £" + str(price)
+                print("print")
+                result = departure_station + "-" + arrival_station + " " + str(arr_date) + " " + departure_time + "-" + arrival_time + " £" + str(price)
                 queueBot.outputq.put(result)
             elif arr_date == 'empty':
                 result = departure_station + "-" + arrival_station + " " + departure_time + "-" + arrival_time + " £" + str(
@@ -191,18 +193,17 @@ class trainFinder():
 
 
 if __name__ == '__main__':
-    #======== Unit testing ========
-    #print(">> Unit test for trainFinder(self, myJourney) __init__() method")
+    # ======== Unit testing ========
+    # print(">> Unit test for trainFinder(self, myJourney) __init__() method")
 
     text = "I want a return journey ticket to London Victoria from Norwich on 2021-10-02 at 09:00, and come back on 2021-10-02 at 12:00"
-    #print("User input text.. ")
-    #print(">>", text)
+    # print("User input text.. ")
+    # print(">>", text)
     booking1 = test.myBooking(text)
     finder = trainFinder(booking1)
-    #print(">> Unit test for makeQuery() method.. ")
-    #print("Opening on Trainline webpage.. ")
+    # print(">> Unit test for makeQuery() method.. ")
+    # print("Opening on Trainline webpage.. ")
     finder.makeQuery()
-
 
 # https://stackoverflow.com/questions/42932168/scraping-data-off-thetrainline-com-for-tickets-and-fares
 # https://stackoverflow.com/questions/8049520/web-scraping-javascript-page-with-python

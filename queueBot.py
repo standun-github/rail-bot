@@ -12,6 +12,16 @@ client = commands.Bot(command_prefix="")
 inputq = Queue()
 outputq = Queue()
 
+show_link = False
+url_link = ""
+
+def set_URL(link_string):
+    global url_link
+    global show_link
+
+    url_link = link_string
+    show_link = True
+
 def init():
     loop = asyncio.get_event_loop()
     # print("p3")
@@ -37,6 +47,7 @@ async def on_message(message):
         inputq.put(user_input)
 
 async def sendOutQ():
+    global show_link
     loop = asyncio.get_running_loop()
     # print("s0")
     general_channel = client.get_channel(793577994986717194)
@@ -44,12 +55,13 @@ async def sendOutQ():
     while True:
         # print("s2")
         with concurrent.futures.ThreadPoolExecutor() as pool:
+
             result = await loop.run_in_executor(pool, outputq.get)
             await general_channel.send("`" + result + "`")
-
-
-async def logOut():
-    await client.logout();
+            if show_link:
+                general_embed = discord.Embed(title="Book Now", description="nationalrail.com",url=url_link)
+                await general_channel.send(embed=general_embed)
+                show_link = False
 
 
 init()

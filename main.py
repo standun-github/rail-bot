@@ -214,4 +214,3 @@ if __name__ == '__main__':
                 reset = True
 
     queueBot.outputq.put("Thank you for using our service. Bye!")
-    queueBot.logOut()
