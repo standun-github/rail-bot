@@ -12,7 +12,6 @@ client = commands.Bot(command_prefix="")
 inputq = Queue()
 outputq = Queue()
 
-
 def init():
     loop = asyncio.get_event_loop()
     # print("p3")
@@ -22,12 +21,10 @@ def init():
     # print("p5")
     thread.start()
 
-
 @client.event
 async def on_ready():
     print("QueueBot is ready")
     await sendOutQ()
-
 
 @client.event
 async def on_message(message):
@@ -38,7 +35,6 @@ async def on_message(message):
         general_channel = client.get_channel(793577994986717194)
         user_input = message.content
         inputq.put(user_input)
-
 
 async def sendOutQ():
     loop = asyncio.get_running_loop()
