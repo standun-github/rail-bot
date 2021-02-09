@@ -130,6 +130,7 @@ class trainFinder():
                         queueBot.set_URL(self.URL_str)
                         # queueBot.outputq.put(self.URL_str)
                     elif self.journeyTypeGroup == 'single':
+                        print("single")
                         self.out_date_param = self.outwardDate.replace("-", '')
                         self.out_time_param = result1.replace(":", '')
                         self.URL_str = self.dep_code + "/" + self.arr_code + "/" + self.out_date_param + "/" + \

@@ -27,8 +27,9 @@ class checkDetails(KnowledgeEngine):
     @Rule(Fact(outbound_date=L('empty')),
           Fact(from_outbound=MATCH.from_outbound))
     def ask_outbound_date(self, from_outbound):
-        str = "What date do you want to travel from", from_outbound, "?"
-        queueBot.outputq.put(str)
+        output_str = "What date do you want to travel from " + str(from_outbound) + "?"
+        print("1")
+        queueBot.outputq.put(output_str)
 
         while True:
             user_input = queueBot.inputq.get()
@@ -40,8 +41,10 @@ class checkDetails(KnowledgeEngine):
                     booking1.set_outbound_date(date)
                     break
                 else:
+                    print("2")
                     queueBot.outputq.put("Your outward journey is in the past. Please enter valid date.")
             else:
+                print("3")
                 queueBot.outputq.put("Sorry, I can't understand. Please use format DD/MM/YY.")
 
     # require outbound date (type datetime.date)
@@ -50,8 +53,9 @@ class checkDetails(KnowledgeEngine):
     def ask_outbound_time(self, outbound_date):
         # cast outbound_date to datetime.datetime obj
         # print(outbound_date)
-        str = "What time do you want to travel on", outbound_date, "?"
-        queueBot.outputq.put(str)
+        output_str = "What time do you want to travel on " + str(outbound_date) + "?"
+        print("4")
+        queueBot.outputq.put(output_str)
 
         while True:
             user_input = queueBot.inputq.get()
@@ -71,15 +75,18 @@ class checkDetails(KnowledgeEngine):
                     booking1.set_outbound_time(time)
                     break
                 else:
-                    str = "Sorry the train at", time, "has departed."
-                    queueBot.outputq.put(str)
+                    output_str = "Sorry the train at" +  time + "has departed."
+                    print("5")
+                    queueBot.outputq.put(output_str)
             else:
+                print("6")
                 queueBot.outputq.put("Sorry, I can't understand. Please use format (HH:MM).")
 
     @Rule(Fact(return_date=L('empty')),
           Fact(journey_type=L('return')),
           Fact(outbound_date=MATCH.outbound_date))
     def ask_return_date(self, outbound_date):
+        print("7")
         queueBot.outputq.put("What date do you want to return?")
 
         while True:
@@ -92,8 +99,10 @@ class checkDetails(KnowledgeEngine):
                     self.declare(Fact(return_date=date))
                     break
                 else:
+                    print("8")
                     queueBot.outputq.put("Your return journey is earlier than your outward journey.")
             else:
+                print("9")
                 queueBot.outputq.put("Sorry, I can't understand. Please use format DD/MM/YY.")
 
     @Rule(Fact(journey_type=L('return')),
@@ -102,8 +111,9 @@ class checkDetails(KnowledgeEngine):
           Fact(outbound_date=MATCH.outbound_date),
           Fact(outbound_time=MATCH.outbound_time))
     def ask_return_time(self, return_date, outbound_date, outbound_time):
-        str = "What time do you want to return on, ", return_date, "?"
-        queueBot.outputq.put(str)
+        output_str = "What time do you want to return on " + str(return_date) + "?"
+        print("10")
+        queueBot.outputq.put(output_str)
         year = return_date.year
         month = return_date.month
         day = return_date.day
@@ -131,12 +141,14 @@ class checkDetails(KnowledgeEngine):
                     booking1.set_return_time(inbound_time)
                     break
                 else:
-                    str = "Sorry you can't travel on", return_date, \
-                          "at", inbound_time, "if you are leaving at", outbound_time
-                    queueBot.outputq.put(str)
+                    output_str = "Sorry you can't travel on " + str(return_date) + \
+                          " at "+ inbound_time + " if you are leaving at " + outbound_time
+                    print("11")
+                    queueBot.outputq.put(output_str)
             else:
-                str = "Sorry I didn't catch that. Please enter the travel time on", return_date, "."
-                queueBot.outputq.put(str)
+                output_str = "Sorry I didn't catch that. Please enter the travel time on "+ str(return_date)+ "."
+                print("12")
+                queueBot.outputq.put(output_str)
 
 
 if __name__ == '__main__':
@@ -153,11 +165,13 @@ if __name__ == '__main__':
     ''' ======== Main system here ======== '''
 
     reset = True
+    print("13")
     queueBot.outputq.put(
         "Hello! I am a bot for train operating company. I can help you find the cheapest train ticket.")
 
     while reset:
         reset = False
+        print("14")
         queueBot.outputq.put("Please type in your journey details..")
 
         # example = "I want to go from Norwich to London King's Cross on Feb 10th at 07:00 and return on Feb 13th. "
@@ -177,9 +191,11 @@ if __name__ == '__main__':
                                        booking1.get_outbound_time())
         ''' To ask for a return journey '''
         if booking1.get_journey_type() == 'single':
+            print("15")
             queueBot.outputq.put("Do you need a return journey? Please reply 'yes' or 'no'.")
             respond = queueBot.inputq.get()
             if respond.lower() == "yes" or respond.lower() == "y":
+                print("16")
                 queueBot.outputq.put("Okay. Please enter a few more details.")
                 booking1.set_journey_type('return')
                 engine.reset()
@@ -191,15 +207,13 @@ if __name__ == '__main__':
 
         confirm = queueBot.inputq.get()
         if confirm.lower() == "yes" or confirm.lower() == "y":  # Correct details
+            print("17")
             queueBot.outputq.put("Great! Let me find the cheapest ticket for you")
             find_ticket = bfare.trainFinder(booking1)
             response = find_ticket.makeQuery()
             if response == 'not found':
-                queueBot.outputq.put("It seems that no tickets are available, "
-                                     "would you like to find other tickets? (y/n)")
-                restart = queueBot.inputq.get()
-                if restart.lower() == "yes" or restart.lower() == "y":
-                    reset = True
+                print("18")
+                queueBot.outputq.put("It seems that no tickets are available.")
             ''' 
             else: 
                 print("Bot: Is there anything else I can do for you?")
@@ -208,9 +222,16 @@ if __name__ == '__main__':
                 ========================================
             '''
         elif confirm.lower() == "no" or confirm.lower() == "n":  # Incorrect details
+            print("19")
             queueBot.outputq.put("Okay. Do you want to start over? (y/n)")
             query = queueBot.inputq.get()
             if query.lower() == "yes" or query.lower() == "y":
                 reset = True
 
+        print("20")
+        queueBot.outputq.put("Do you want to book another ticket? (y/n)")
+        another = queueBot.inputq.get()
+        if another.lower() == "yes" or another.lower() == "y":  # Correct details
+            reset = True
+    print("21")
     queueBot.outputq.put("Thank you for using our service. Bye!")

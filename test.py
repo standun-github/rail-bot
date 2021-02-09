@@ -113,6 +113,7 @@ class myBooking:
             counter = counter + 1
 
         while self.from_outbound == 'empty':
+            print("22")
             queueBot.outputq.put("Please specify outbound station.")
             user_input = queueBot.inputq.get()
             self.from_outbound = self.find_railway_station(user_input)
@@ -126,6 +127,7 @@ class myBooking:
             counter = counter + 1
 
         while self.to_inbound == 'empty':
+            print("23")
             queueBot.outputq.put("Please specify inbound station.")
             user_input = queueBot.inputq.get()
             self.to_inbound = self.find_railway_station(user_input)
