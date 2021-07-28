@@ -105,6 +105,7 @@ class trainFinder():
             # print("1", outbound_prices['cheapestTickets'])
             # for key,value in outbound_prices.items():
             #    print(key,value)
+            result1 = self.findCheapest(outbound_prices)
 
             if self.journeyTypeGroup == 'return':
                 inbound_prices = train_schedule['fullJourneys'][1]
@@ -112,13 +113,13 @@ class trainFinder():
                 # for key,value in inbound_prices.items():
                 #    print(key,value)
                 # print("Finding cheapest ticket.. ")
-                result1 = self.findCheapest(outbound_prices)
                 result2 = self.findCheapest(inbound_prices)
 
                 if result1 == "not found" or result2 == "not found":
                     queueBot.outputq.put("Sorry we can't find the right ticket for you! It may be sold out.")
                 else:
                     if self.journeyTypeGroup == 'return':
+                        print("Return")
                         self.out_date_param = self.outwardDate.replace("-", '')
                         self.out_time_param = result1.replace(":", '')
                         self.in_date_param = self.returnDate.replace("-", '')
@@ -129,20 +130,17 @@ class trainFinder():
                         self.URL_str = "https://ojp.nationalrail.co.uk/service/timesandfares/" + self.URL_str
                         queueBot.set_URL(self.URL_str)
                         # queueBot.outputq.put(self.URL_str)
-                    elif self.journeyTypeGroup == 'single':
-                        print("single")
-                        self.out_date_param = self.outwardDate.replace("-", '')
-                        self.out_time_param = result1.replace(":", '')
-                        self.URL_str = self.dep_code + "/" + self.arr_code + "/" + self.out_date_param + "/" + \
-                                       self.out_time_param + "/dep/"
-                        self.URL_str = "https://ojp.nationalrail.co.uk/service/timesandfares/" + self.URL_str
-                        queueBot.set_URL(self.URL_str)
-                        # queueBot.outputq.put(self.URL_str)
-
             else:
-                result = self.findCheapest(outbound_prices)
-                if result == "not found":
+                if result1 == "not found":
                     queueBot.outputq.put("Sorry we can't find the right ticket for you! It may be sold out.")
+                else:
+                    self.out_date_param = self.outwardDate.replace("-", '')
+                    self.out_time_param = result1.replace(":", '')
+                    self.URL_str = self.dep_code + "/" + self.arr_code + "/" + self.out_date_param + "/" + \
+                                   self.out_time_param + "/dep/"
+                    self.URL_str = "https://ojp.nationalrail.co.uk/service/timesandfares/" + self.URL_str
+                    queueBot.set_URL(self.URL_str)
+                    # queueBot.outputq.put(self.URL_str)
         except:
             queueBot.outputq.put("Sorry we could not process your request.")
             return "not found"
@@ -184,7 +182,8 @@ class trainFinder():
         else:
             if arr_date != 'empty':
                 print("print")
-                result = departure_station + "-" + arrival_station + " " + str(arr_date) + " " + departure_time + "-" + arrival_time + " £" + str(price)
+                result = departure_station + "-" + arrival_station + " " + str(
+                    arr_date) + " " + departure_time + "-" + arrival_time + " £" + str(price)
                 queueBot.outputq.put(result)
             elif arr_date == 'empty':
                 result = departure_station + "-" + arrival_station + " " + departure_time + "-" + arrival_time + " £" + str(

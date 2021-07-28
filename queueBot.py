@@ -42,7 +42,7 @@ async def on_message(message):
         return
     else:
         # enter your own text channel ID
-        general_channel = client.get_channel(793577994986717194)
+        #general_channel = client.get_channel(793577994986717194)
         user_input = message.content
         inputq.put(user_input)
 
@@ -50,7 +50,8 @@ async def sendOutQ():
     global show_link
     loop = asyncio.get_running_loop()
     # print("s0")
-    general_channel = client.get_channel(793577994986717194)
+    #general_channel = client.get_channel(793577994986717194)
+    general_channel = client.get_channel(808015857770692658)
     # print("s1")
     while True:
         # print("s2")
