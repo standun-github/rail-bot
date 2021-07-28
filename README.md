@@ -10,7 +10,5 @@ Libraries that i've used to develop this project
 2.Scikit-learn <br>
 3.Scipy <br>
 4.Pandas <br>
-5.TensorFlow <br>
-6.Matplotlib <br>
 7.BeautifulSoup4 <br>
 8.Requests <br>
